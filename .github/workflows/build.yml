@@ -5,6 +5,12 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      custom_tag:
+        description: 'Custom Docker tag (optional)'
+        required: false
+        default: ''
 
 jobs:
 
