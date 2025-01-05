@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
   apiserver:
-    image: eatmoreapple/wxapiserver:latest
+    image: aimi614/wxapiserver:fa87af2b8160991e1e99b453f0e98395c20b4fa8
     container_name: apiserver
     restart: unless-stopped
     tty: true
     ports:
-      - "19089:19089"
+      - "19088:19088"
       - "8080:8080"
     environment:
       - WINEDEBUG=fixme-all
