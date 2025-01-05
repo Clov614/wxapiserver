@@ -1,10 +1,9 @@
-name: Deploy
+name: BuildDockerImage
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v*'  # 只在推送符合 v* 格式的标签时触发
   workflow_dispatch:
     inputs:
       custom_tag:
@@ -13,7 +12,6 @@ on:
         default: ''
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -38,18 +36,18 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push latest
+      - name: Build and push Docker image with version tag
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/wxapiserver
+          tags: ${{ secrets.DOCKER_USERNAME }}/wxapiserver:${{ github.ref }}  # 使用标签作为 Docker 镜像的标签
           file: ./Dockerfile
           context: .
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           builder: ${{ steps.buildx.outputs.name }}
 
-      - name: Build and push
+      - name: Build and push Docker image with commit SHA tag
         uses: docker/build-push-action@v2
         with:
           push: true
