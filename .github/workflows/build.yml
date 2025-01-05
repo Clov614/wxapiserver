@@ -50,8 +50,8 @@ jobs:
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/wxapiserver:${{ env.VERSION }}  # 使用去掉前缀后的版本标签
-            ${{ secrets.DOCKER_USERNAME }}/wxapiserver:latest             # 推送 latest 标签
+            ${{ secrets.DOCKER_USERNAME }}/wxapiserver:${{ env.VERSION }}
+            ${{ secrets.DOCKER_USERNAME }}/wxapiserver:latest
           file: ./Dockerfile
           context: .
           cache-from: type=local,src=/tmp/.buildx-cache
