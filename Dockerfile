@@ -19,7 +19,7 @@ RUN sudo rm -rf /tmp/.X0-lock
 RUN sudo apt-get install -y lsof
 
 # 根据传入参数安装微信和wxhelper.dll
-ARG WECHAT_URL=https://github.com/tom-snow/wechat-windows-versions/releases/download/v3.9.12.17/WeChatSetup-3.9.12.17.exe
+ARG WECHAT_URL=https://github.com/tom-snow/wechat-windows-versions/releases/download/v3.9.10.19/WeChatSetup-3.9.10.19.exe
 ARG WXHELPER_URL=https://github.com/ttttupup/wxhelper/releases/download/3.9.10.19-v1/wxhelper.dll
 
 WORKDIR /home/app/.wine/drive_c
