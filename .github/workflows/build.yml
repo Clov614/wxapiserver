@@ -1,4 +1,4 @@
-name: BuildDockerImage
+name: Deploy
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
-      # cache docker layers
+      # Cache Docker layers
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
@@ -36,28 +36,22 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image with version tag
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/wxapiserver:${{ github.ref }}
-          file: ./Dockerfile
-          context: .
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          builder: ${{ steps.buildx.outputs.name }}
-
+      # Extract version from ref
       - name: Extract version from ref
         id: extract_version
         run: |
+          # 去掉 refs/tags/ 前缀，只保留标签部分
           VERSION="${GITHUB_REF#refs/tags/}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-      - name: Build and push Docker image with version tag (fixed)
+      # Build and push Docker image with version tag and latest tag
+      - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/wxapiserver:${{ env.VERSION }}  # 使用从 ref 中提取的标签
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/wxapiserver:${{ env.VERSION }}
+            ${{ secrets.DOCKER_USERNAME }}/wxapiserver:latest
           file: ./Dockerfile
           context: .
           cache-from: type=local,src=/tmp/.buildx-cache
